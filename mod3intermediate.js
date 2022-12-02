@@ -1,3 +1,5 @@
+
+
 // 1: Uppercase the first character
 
 //Write a function ucFirst(str) that returns the string str with the capitalized first character
@@ -6,10 +8,20 @@
 function questionOneIntermediate() {
     function ucFirst(str) {
         //Write code in here
+        let newString;
+        newString = str.slice(0, 1);
+        return newString.toUpperCase() + str.slice(1);;
     }
 
     console.log(ucFirst("john") == "John" ? 'Everything has worked as planned' : 'Something went wrong')
+    //OR
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+    console.log(capitalizeFirstLetter("john") == "John" ? 'Everything has worked as planned' : 'Something went wrong')
 }
+
+
 
 // 2: Truncate the text
 
@@ -22,9 +34,15 @@ function questionOneIntermediate() {
 function questionTwoIntermediate() {
     function truncate(str, maxlength) {
         //Write code in here
+        if (str.length >= maxlength) {
+            return str = str.substring(0, maxlength) + "...";
+        } else {
+            return str;
+        }
     }
-
-    if (truncate("What I'd like to tell you on this topic is:", 20) == "What I'd like to te...") {
+    //Note that the substring() method does not change the original string.
+    console.log(truncate("What I'd like to tell you on this topic is:", 20));
+    if (truncate("What I'd like to tell you on this topic is:", 20) == "What I'd like to tel...") {
         console.log("Test 1 passed")
     } else {
         console.log("Test 1 failed")
@@ -56,6 +74,17 @@ function questionTwoIntermediate() {
 
 function questionThreeIntermediate() {
     //Write code here
+    let music = ["Jazz", "Blues"];
+    console.log(music);
+    music.push("Rock-n-Roll");
+    console.log(music);
+    music.splice(1, 1, "Classics");
+    console.log(music);
+    let shifteditem = music.shift();
+    console.log(shifteditem);
+    console.log(music);
+    music.unshift("Rap", "Reggae");
+    console.log(music);
 }
 
 // 4: Translate border-left-width to borderLeftWidth
@@ -66,9 +95,21 @@ function questionThreeIntermediate() {
 //That is: removes all dashes, each word after dash becomes uppercased
 
 function questionFourIntermediate() {
-    function camelize(str) {
 
+    const camelize = (str) => {
+        let wordArr = str.split(/[-_]/g); //this will split the string into substring that match character after dash -
+        console.log(wordArr); //after this: ['background', 'color']
+        let newStr = "";
+        for (let i in wordArr) {
+            if (i > 0) {
+                newStr += wordArr[i].charAt(0).toUpperCase() + wordArr[i].slice(1).toLowerCase();//to true camel case
+            } else {
+                newStr += wordArr[i].toLowerCase(); //to true camel case
+            }
+        }
+        return newStr;
     }
+
 
     if (camelize("background-color") == 'backgroundColor') {
         console.log("Test 1 passed")
@@ -128,6 +169,28 @@ function questionFourIntermediate() {
 function questionFiveIntermediate() {
     //Write your Calculator constructor function here
 
+    function Calculator() {
+        this.methods = {
+            "-": (a, b) => a - b,
+            "+": (a, b) => a + b
+        }; // so the first object is method which contains the "-" and the "+" 
+        this.calculate = function (str) {
+            let split = str.split(' '),
+                a = +split[0],
+                op = split[1],
+                b = +split[2];
+            // the second object is taking in the string you want to pass as argument, then split it down to array
+            // then we assigned number at index 0 to a, op at index 1 doesnt have to be a number, then b at index 2 is a number
+            if (!this.methods[op] || isNaN(a) || isNaN(b)) {
+                return NaN;
+            } // this step is checking if we are passing valid argument or not (sanitation)
+            return this.methods[op](a, b);
+        }; //otherwise we can pass a,b to op and carry on with the calculation (this is kinda like else)
+
+        this.addMethod = function (name, func) {
+            this.methods[name] = func;
+        };
+    }
     let powerCalc = new Calculator()
     powerCalc.addMethod("*", (a, b) => a * b);
     powerCalc.addMethod("/", (a, b) => a / b);
@@ -182,6 +245,14 @@ function questionFiveIntermediate() {
 function questionSixIntermediate() {
     function unique(arr) {
         //Write code here
+        let result = [];
+        for (let str of arr) {
+            if (!result.includes(str)) {
+                result.push(str);
+            }
+        }
+        return result;
+
     }
 
     if (unique(['Sebastian', 'Auckland', 'Auckland', 'AKL', 'NZ', 'AKL', 'NZ']).length == 4) {
@@ -206,15 +277,15 @@ function questionSevenIntermediate() {
 
         map.set("name", "John");
 
-        let keys = map.keys();
+        let keys = Array.from(map.keys());
 
-        keys.push("more") //Error: keys.push is not a function
+        keys.push("more")
 
         console.log(keys)
     } catch (e) {
         console.error('An error occured')
         console.error(e)
-    }
+    } // give you opportunity to handle exception and it is useful to use in debug
 }
 
 // 8: Store "unread flags"
@@ -247,13 +318,27 @@ let messages = [
 
 function questionEightIntermediate() {
     let messages = [
-        {text: "Hello", from: "John"},
-        {text: "How goes?", from: "John"},
-        {text: "See you soon", from: "Alice"}
+        { text: "Hello", from: "John" },
+        { text: "How goes?", from: "John" },
+        { text: "See you soon", from: "Alice" }
     ]
 
     //Write your code here
+    let readMessages = new WeakSet();
+    // two messages have been read
+    readMessages.add(messages[0]);
+    readMessages.add(messages[1]);
+    // readMessages has 2 elements
+    // ...let's read the first message again!
+    readMessages.add(messages[0]);
+    // readMessages still has 2 unique elements
+    // answer: was the message[0] read?
+    alert("Read message 0: " + readMessages.has(messages[0])); // true
+    messages.shift();
+    // now readMessages has 1 element (technically memory may be cleaned later)
+    //to cache means to store the return to memory - not waste processing power - store something there ready to go
 }
+//I DIDNT GET QUESTION 8, ASK IN LAB
 
 // 9: Sum the properties
 
@@ -266,7 +351,7 @@ function questionEightIntermediate() {
 
 function questionNineIntermediate() {
     function sumSalaries(salaries) {
-        //Write your code here
+        return Object.values(salaries).reduce((a, b) => a + b, 0) // 650
     }
 
     let salaries = {
@@ -309,6 +394,15 @@ const salaries = {
 function questionTenIntermediate() {
     function topSalary(salaries) {
         //Write your code here
+        let maxSalary = 0;
+        let maxName = null;
+        for (const [name, salary] of Object.entries(salaries)) {
+            if (maxSalary < salary) {
+                maxSalary = salary;
+                maxName = name;
+            }
+        }
+        return maxName;
     }
 
     const salaries = {
@@ -340,7 +434,7 @@ function questionTenIntermediate() {
         console.log("Test 2 failed")
     }
 
-    if ( salariesTwoHighestSalaries.includes( topSalary(salariesTwo) ) ) {
+    if (salariesTwoHighestSalaries.includes(topSalary(salariesTwo))) {
         console.log("Test 3 passed")
     } else {
         console.log("Test 3 failed")
@@ -362,6 +456,8 @@ function questionTenIntermediate() {
 function questionElevenIntermediate() {
     function getSecondsToday() {
         //Write your code here
+        let d = new Date();
+        return d.getHours() * 3600 + d.getMinutes() * 60 + d.getSeconds();
     }
 
     console.log(getSecondsToday())
@@ -385,7 +481,7 @@ function questionTwelveIntermediate() {
 
     let meetup = {
         title: "Conference",
-        occupiedBy: [{name: "John"}, {name: "Alice"}],
+        occupiedBy: [{ name: "John" }, { name: "Alice" }],
         place: room
     }
 
@@ -395,6 +491,7 @@ function questionTwelveIntermediate() {
 
     console.log(JSON.stringify(meetup, function replacer(key, value) {
         //Write your replacer code here
+        return (key != "" && value == meetup) ? undefined : value;
     }))
 
     /*

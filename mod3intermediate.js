@@ -93,8 +93,20 @@ function questionThreeIntermediate() {
 //like "my-short-string" into camel-cased "myShortString"
 
 //That is: removes all dashes, each word after dash becomes uppercased
-
-function questionFourIntermediate() {
+function questionFourIntermediateMyanswer() {
+function camelize(str) {
+    return str
+    .split('-') // splits 'my-long-word' into array ['my', 'long', 'word']
+    .map(
+    // capitalizes first letters of all array items except the first one
+    // converts ['my', 'long', 'word'] into ['my', 'Long', 'Word']
+    (word, index) => index == 0 ? word :
+   word[0].toUpperCase() + word.slice(1)
+    )
+   .join(''); // joins ['my', 'Long', 'Word'] into 'myLongWord'
+   }
+}
+function questionFourIntermediateMyanswer() {
 
     const camelize = (str) => {
         let wordArr = str.split(/[-_]/g); //this will split the string into substring that match character after dash -
@@ -274,13 +286,9 @@ function questionSevenIntermediate() {
     //Change the code within the try block so no error occurs
     try {
         let map = new Map();
-
         map.set("name", "John");
-
         let keys = Array.from(map.keys());
-
         keys.push("more")
-
         console.log(keys)
     } catch (e) {
         console.error('An error occured')
@@ -290,17 +298,13 @@ function questionSevenIntermediate() {
 
 // 8: Store "unread flags"
 //There's an array of messages:
-
 /*
-
 let messages = [
     {text: "Hello", from: "John"},
     {text: "How goes?", from: "John"},
     {text: "See you soon", from: "Alice"}
 ]
-
 */
-
 //Your code can access it, but the messages are managed by someone else's code.
 //New messages are added, old ones are removed regularly by that code,
 //and you don't know the exact moments when it happens.
@@ -320,28 +324,28 @@ function questionEightIntermediate() {
     let messages = [
         { text: "Hello", from: "John" },
         { text: "How goes?", from: "John" },
-        { text: "See you soon", from: "Alice" }
+        { text: "See you soon", from: "Alice" } //these messages can not be accessed by you so 
     ]
 
-    //Write your code here
-    let readMessages = new WeakSet();
-    // two messages have been read
-    readMessages.add(messages[0]);
-    readMessages.add(messages[1]);
-    // readMessages has 2 elements
-    // ...let's read the first message again!
-    readMessages.add(messages[0]);
-    // readMessages still has 2 unique elements
+    let readMessages = new WeakSet(); // you have to store these data temporarily (copy them down somewhere)
+    readMessages.add(messages[0]); // add text: "Hello", from: "John"
+    readMessages.add(messages[1]); // add text: "How goes?", from: "John" 
+    readMessages.add(messages[0]); // add first message again - text: "Hello", from: "John"
     // answer: was the message[0] read?
     alert("Read message 0: " + readMessages.has(messages[0])); // true
     messages.shift();
+    // The shift() method removes the first element from an array and returns that removed element. 
+    // This method changes the length of the array.
     // now readMessages has 1 element (technically memory may be cleaned later)
-    //to cache means to store the return to memory - not waste processing power - store something there ready to go
+    // Note that this is just add-in feature for the original code - "let messages" which is maintained by someone else
+    /* So you cannot display or console.log([readMessages]); or see the actual content of "let messages", due to security reasons
+     just as much as memory saving / efficiency / as per demand / as per purpose reasons. 
+     And you cannot change or modify the original code either. This is actually a bless.
+    */
 }
-//I DIDNT GET QUESTION 8, ASK IN LAB
 
 // 9: Sum the properties
-
+//to cache means to store the return to memory - not waste processing power - store something there ready to go
 //There is a salaries object with arbitrary number of salaries.
 
 //Write the function sumSalaries(salaries) that returns the sum of all salaries
@@ -385,10 +389,8 @@ const salaries = {
 */
 
 //Create the function topSalry(salaries) that returns the name of the top-paid person
-
 //If salaries is empty, it should return null
 //If there are multiple top-paid persons, return any of them.
-
 //P.S Use Object.entries and destructuring to iterate over key/value pairs
 
 function questionTenIntermediate() {
@@ -404,13 +406,11 @@ function questionTenIntermediate() {
         }
         return maxName;
     }
-
     const salaries = {
         "John": 100,
         "Pete": 300,
         "Mary": 250
     };
-
     const salariesTwo = {
         "John": 300,
         "Pete": 300,
@@ -419,21 +419,17 @@ function questionTenIntermediate() {
         "Alex": 100,
         "Azaria": 100
     }
-
     const salariesTwoHighestSalaries = ["John", "Pete", "Bradley"]
-
     if (topSalary(salaries) === 'Pete') {
         console.log("Test 1 passed")
     } else {
         console.log("Test 1 failed")
     }
-
     if (topSalary({}) == null) {
         console.log("Test 2 passed")
     } else {
         console.log("Test 2 failed")
     }
-
     if (salariesTwoHighestSalaries.includes(topSalary(salariesTwo))) {
         console.log("Test 3 passed")
     } else {
@@ -442,14 +438,11 @@ function questionTenIntermediate() {
 }
 
 // 11: How many seconds have passed today?
-
 //Write a function getSecondsToday() that returns the number of seconds from
 //the beggining of today.
-
 //For instance, if now were 10:00AM, and there was no daylght savings shift,
 //then:
 //getSecondsToday() == 36000 // (3600 * 10)
-
 //The function should work in any day. That is, it should not have a
 //hard-coded value of "today".
 
@@ -459,7 +452,6 @@ function questionElevenIntermediate() {
         let d = new Date();
         return d.getHours() * 3600 + d.getMinutes() * 60 + d.getSeconds();
     }
-
     console.log(getSecondsToday())
 }
 
@@ -493,7 +485,6 @@ function questionTwelveIntermediate() {
         //Write your replacer code here
         return (key != "" && value == meetup) ? undefined : value;
     }))
-
     /*
         Result should be:
         {
